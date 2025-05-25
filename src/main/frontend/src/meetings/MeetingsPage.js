@@ -46,18 +46,19 @@ export default function MeetingsPage({username}) {
     async function handleAddParticipant(meeting) {
 
         // let meetingId = meeting.id;
-        // console.log("meetingId: " + meetingId) ;
+        console.log("meetingId: " + meetingId) ;
         // console.log("username: " + username) ;
 
-        // const response = await fetch('/api/meetings/${meeting.id}/participants', {
         const response = await fetch(`/api/meetings/${meeting.id}/participants`, {
+
             method: 'POST',
+            body: JSON.stringify({login: username}),
+            headers: {'Content-Type': 'application/json'}
         });
 
         if (response.ok) {
-            const participant = await response.json();
-            setMeetings(participant);
-
+            console.log("oki")
+            setAddingNewMeeting(false);
         }
     }
 
