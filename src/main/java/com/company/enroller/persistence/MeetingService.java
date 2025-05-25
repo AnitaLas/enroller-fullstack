@@ -70,4 +70,16 @@ public class MeetingService {
         return query.list().size() != 0;
     }
 
+    public Collection<Participant> getParticipants(long id) {
+        Meeting newMeeting = findById(id);
+        Collection<Participant> participants = newMeeting.getParticipants();
+        return participants;
+    }
+    
+    public Participant getParticipant(long id, Participant participant) {
+        Collection<Participant> participants =  getParticipants( id);
+        Participant foundParticipant = participants.iterator().next();
+        return foundParticipant;
+    }
+
 }

@@ -21,7 +21,7 @@ export default function MeetingsPage({username}) {
         const response = await fetch('/api/meetings', {
             method: 'POST',
             body: JSON.stringify(meeting),
-            headers: { 'Content-Type': 'application/json' }
+            headers: {'Content-Type': 'application/json'}
         });
 
         if (response.ok) {
@@ -43,6 +43,24 @@ export default function MeetingsPage({username}) {
         }
     }
 
+    async function handleAddParticipant(meeting) {
+
+        // let meetingId = meeting.id;
+        // console.log("meetingId: " + meetingId) ;
+        // console.log("username: " + username) ;
+
+        // const response = await fetch('/api/meetings/${meeting.id}/participants', {
+        const response = await fetch(`/api/meetings/${meeting.id}/participants`, {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const participant = await response.json();
+            setMeetings(participant);
+
+        }
+    }
+
     return (
         <div>
             <h2>Zajęcia ({meetings.length})</h2>
@@ -53,7 +71,8 @@ export default function MeetingsPage({username}) {
             }
             {meetings.length > 0 &&
                 <MeetingsList meetings={meetings} username={username}
-                              onDelete={handleDeleteMeeting}/>}
+                              onDelete={handleDeleteMeeting}
+                              onAddParticipant={handleAddParticipant}/>}
         </div>
     )
 }
