@@ -77,8 +77,10 @@ public class MeetingService {
     }
     
     public Participant getParticipant(long id, Participant participant) {
-        Collection<Participant> participants =  getParticipants( id);
+        Collection<Participant> participants =  getParticipants(id);
+        System.out.println("test 4 participants number " + participants.size());
         Participant foundParticipant = participants.iterator().next();
+        System.out.println("test 4b");
         return foundParticipant;
     }
 

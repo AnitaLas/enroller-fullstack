@@ -1,4 +1,4 @@
-export default function MeetingsList({meetings, onDelete, onAddParticipant}) {
+export default function MeetingsList({meetings, onDelete, onAddParticipant, onDeleteParticipant}) {
     return (
         <table>
             <thead>
@@ -6,8 +6,8 @@ export default function MeetingsList({meetings, onDelete, onAddParticipant}) {
                 <th>Nazwa spotkania</th>
                 <th>Opis</th>
                 <th>Usuń spotkanie</th>
-                <th>Dodaj uczestnika</th>
-                <th>Usuń uczestnika</th>
+                <th>Zapisz mnie na spotkanie</th>
+                <th>Wypisz mnie z spotkania</th>
             </tr>
             </thead>
             <tbody>
@@ -15,9 +15,9 @@ export default function MeetingsList({meetings, onDelete, onAddParticipant}) {
                 meetings.map((meeting, index) => <tr key={index}>
                     <td>{meeting.title}</td>
                     <td>{meeting.description}</td>
-                    <td><button type="button" onClick={() => onDelete(meeting)}>USUŃ</button></td>
-                    <td><button type="button" onClick={() => onAddParticipant(meeting)}>DODAJ</button></td>
-                    <td><button type="button" onClick={() => onDelete(meeting)}>USUŃ</button></td>
+                    <td><button type="button" onClick={() => onDelete(meeting)}>Usuń</button></td>
+                    <td><button type="button" onClick={() => onAddParticipant(meeting)}>Zapisz</button></td>
+                    <td><button type="button" onClick={() => onDeleteParticipant(meeting)}>Wypisz</button></td>
                 </tr>)
             }
             </tbody>
