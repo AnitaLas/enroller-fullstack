@@ -95,6 +95,7 @@ public class MeetingRestController {
             System.out.println("test 2c");
             return new ResponseEntity<>("Participant not found", HttpStatus.NOT_FOUND);
         }
+
 //   działa dodawanie, gdy zakomentowane sprawdzanie - trzeba naprawić
 //        System.out.println("test 3a");
 //        Participant mettingParticipant = meetingService.getParticipant(id, existingParticipant);
@@ -103,6 +104,15 @@ public class MeetingRestController {
 //            System.out.println("test 3c");
 //            return new ResponseEntity<>("Participant already registered.", HttpStatus.FOUND);
 //        }
+
+        System.out.println("test 3a");
+        Participant mettingParticipant = meetingService.getParticipant(id, existingParticipant);
+//        System.out.println("test 3b " + meetingService.getParticipant(id, existingParticipant));
+        System.out.println("test 3b " + mettingParticipant);
+        if (meetingService.getParticipant(id, existingParticipant) != null) {
+            System.out.println("test 3c");
+            return new ResponseEntity<>("Participant already registered.", HttpStatus.FOUND);
+        }
 
         System.out.println("test 4");
         meeting.addParticipant(existingParticipant);
