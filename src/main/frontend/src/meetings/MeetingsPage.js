@@ -6,10 +6,9 @@ import MeetingsList from "./MeetingsList";
 export default function MeetingsPage({username}) {
     const [meetings, setMeetings] = useState([]);
     const [addingNewMeeting, setAddingNewMeeting] = useState(false);
-    const [meeting, setMeeting] = useState();
 
+    const [meeting, setMeeting] = useState();
     const [editMeeting, setEditMeeting] = useState(false);
-    const [updateMeeting, setUpdateMeeting] = useState();
 
     useEffect(() => {
         const fetchMeetings = async () => {
@@ -34,23 +33,19 @@ export default function MeetingsPage({username}) {
             const nextMeetings = [...meetings, newMeeting];
             setMeetings(nextMeetings);
             setAddingNewMeeting(false);
-
         }
     }
 
 
-
     async function handleGetMeeting(meeting) {
-
         const response = await fetch(`/api/meetings/${meeting.id}`, {
             method: 'GET',
         });
 
         if (response.ok) {
             setAddingNewMeeting(false);
-            setMeeting(meeting)
-            // console.log("GET updateMeeting " + updateMeeting.id)
-            setEditMeeting(true)
+            setMeeting(meeting);
+            setEditMeeting(true);
         }
     }
 
@@ -76,86 +71,76 @@ export default function MeetingsPage({username}) {
         }
     }
 
-async function handleDeleteMeeting(meeting) {
-    const response = await fetch(`/api/meetings/${meeting.id}`, {
-        method: 'DELETE',
+    async function handleDeleteMeeting(meeting) {
+        const response = await fetch(`/api/meetings/${meeting.id}`, {
+            method: 'DELETE',
 
-    });
-    if (response.ok) {
-        const nextMeetings = meetings.filter(m => m !== meeting);
-        setMeetings(nextMeetings);
-        // setEditMeeting(false)
+        });
+        if (response.ok) {
+            const nextMeetings = meetings.filter(m => m !== meeting);
+            setMeetings(nextMeetings);
+        }
     }
-}
 
-async function handleAddParticipant(meeting) {
+    async function handleAddParticipant(meeting) {
 
-    // let meetingId = meeting.id;
-    console.log("meetingId: " + meeting.id);
-    // console.log("username: " + username) ;
+        // let meetingId = meeting.id;
+        console.log("meetingId: " + meeting.id);
+        // console.log("username: " + username) ;
 
-    const response = await fetch(`/api/meetings/${meeting.id}/participants`, {
+        const response = await fetch(`/api/meetings/${meeting.id}/participants`, {
 
-        method: 'POST',
-        body: JSON.stringify({login: username}),
-        headers: {'Content-Type': 'application/json'}
-    });
+            method: 'POST',
+            body: JSON.stringify({login: username}),
+            headers: {'Content-Type': 'application/json'}
+        });
 
-    if (response.ok) {
-        console.log("oki")
-        setAddingNewMeeting(false);
+        if (response.ok) {
+            console.log("oki")
+            setAddingNewMeeting(false);
+        }
     }
-}
 
-async function handleDeleteParticipant(meeting) {
+    async function handleDeleteParticipant(meeting) {
 
-    // let meetingId = meeting.id;
-    console.log("meetingId: " + meeting.id);
-    // console.log("username: " + username) ;
+        // let meetingId = meeting.id;
+        console.log("meetingId: " + meeting.id);
+        // console.log("username: " + username) ;
 
-    const response = await fetch(`/api/meetings/${meeting.id}/participants/${username}`, {
-        method: 'DELETE',
-    });
-    if (response.ok) {
-        // const nextMeetings = meetings.filter(m => m !== meeting);
-        // setMeetings(nextMeetings);
+        const response = await fetch(`/api/meetings/${meeting.id}/participants/${username}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            // const nextMeetings = meetings.filter(m => m !== meeting);
+            // setMeetings(nextMeetings);
+        }
     }
-}
-
 
 
     return (
-    <div>
-        <h2>Zajęcia ({meetings.length})</h2>
-        {
-            addingNewMeeting
-                ? <NewMeetingForm meeting={meeting} onSubmit={(meeting) => handleNewMeeting(meeting)}/>
-                : <button onClick={() => setAddingNewMeeting(true)}>Dodaj nowe spotkanie</button>
-        }
-        {
-            // editMeeting
-            //     ? <UpdateMeetingForm meeting={updateMeeting}
-            //                          setUpdateMeeting ={setEditMeeting}
-            //                          onSubmit={(updateMeeting) => handleUpdateMeeting(updateMeeting)}/>
-            //     : <button>??????????</button>
-
-            editMeeting
-            ? <UpdateMeetingForm meeting={meeting}
-                                 // setUpdateMeeting ={meeting}
-                                 onSubmit={(meeting) => handleUpdateMeeting(meeting)}/>
-                : <button>??????????</button>
+        <div>
+            <h2>Zajęcia ({meetings.length})</h2>
+            {
+                addingNewMeeting
+                    ? <NewMeetingForm meeting={meeting} onSubmit={(meeting) => handleNewMeeting(meeting)}/>
+                    : <button onClick={() => setAddingNewMeeting(true)}>Dodaj nowe spotkanie</button>
+            }
+            {
+                editMeeting
+                    ? <UpdateMeetingForm
+                        key={meeting?.id}
+                        meeting={meeting}
+                        onSubmit={(meeting) => handleUpdateMeeting(meeting)}/>
+                    : <button>do zmiany</button>
 
 
-
-
-        }
-        {meetings.length > 0 &&
-            <MeetingsList meetings={meetings} username={username}
-                // onUpdateMeeting={ha}
-                          onEditMeeting={handleGetMeeting}
-                          onDelete={handleDeleteMeeting}
-                          onAddParticipant={handleAddParticipant}
-                          onDeleteParticipant={handleDeleteParticipant}/>}
-    </div>
-)
+            }
+            {meetings.length > 0 &&
+                <MeetingsList meetings={meetings} username={username}
+                              onEditMeeting={handleGetMeeting}
+                              onDelete={handleDeleteMeeting}
+                              onAddParticipant={handleAddParticipant}
+                              onDeleteParticipant={handleDeleteParticipant}/>}
+        </div>
+    )
 }

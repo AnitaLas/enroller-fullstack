@@ -59,8 +59,6 @@ public class MeetingService {
     public void update(Meeting meeting) {
         Transaction transaction = this.session.beginTransaction();
         this.session.merge(meeting);
-        System.out.println("meeting updated: " + meeting.getTitle());
-        System.out.println("meeting updated: " + meeting.getDescription());
         transaction.commit();
     }
 
@@ -77,12 +75,12 @@ public class MeetingService {
         Collection<Participant> participants = newMeeting.getParticipants();
         return participants;
     }
-    
+
     public Participant getParticipant(long id, Participant participant) {
-        Collection<Participant> participants =  getParticipants(id);
+        Collection<Participant> participants = getParticipants(id);
         System.out.println("test 4 participants number " + participants.size());
 //        if(participants.size() > 0){
-        if(!participants.isEmpty())
+        if (!participants.isEmpty())
 //        {
 //            Participant foundParticipant = participants.iterator().next();
 //            return foundParticipant;

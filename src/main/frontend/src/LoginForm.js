@@ -7,11 +7,11 @@ export default function LoginForm({onLogin, buttonLabel}) {
         const response = await fetch('/api/participants', {
             method: 'POST',
             body: JSON.stringify({login: email}),
-            headers: { 'Content-Type': 'application/json' }
+            headers: {'Content-Type': 'application/json'}
         });
 
         if (response.ok) {
-          onLogin(email);
+            onLogin(email);
         }
     }
 
