@@ -116,6 +116,9 @@ export default function MeetingsPage({username}) {
         }
     }
 
+    async function handleCancelUpdateMeeting(meeting){
+        setEditMeeting(false)
+    }
 
     return (
         <div>
@@ -130,10 +133,9 @@ export default function MeetingsPage({username}) {
                     ? <UpdateMeetingForm
                         key={meeting?.id}
                         meeting={meeting}
-                        onSubmit={(meeting) => handleUpdateMeeting(meeting)}/>
+                        onSubmit={(meeting) => handleUpdateMeeting(meeting)}
+                        onCancel={(meeting) => handleCancelUpdateMeeting(meeting)}/>
                     : <button>do zmiany</button>
-
-
             }
             {meetings.length > 0 &&
                 <MeetingsList meetings={meetings} username={username}

@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-export default function UpdateMeetingForm({meeting, onSubmit}) {
+export default function UpdateMeetingForm({meeting, onSubmit, onCancel}) {
     const [title, setTitle] = useState(meeting.title);
     const [description, setDescription] = useState(meeting.description);
 
@@ -18,7 +18,9 @@ export default function UpdateMeetingForm({meeting, onSubmit}) {
             <label>Opis</label>
             <textarea value={description}
                       onChange={(e) => setDescription(e.target.value)}></textarea>
-            <button>Zapisz zmiany updateMeetingForm</button>
+            <button type="submit">Zapisz zmiany</button>
+            {/*<button onClick={onCancel}>Zamknij bez zapisu</button>*/}
+            <button onClick={onCancel}>X</button>
         </form>
     );
 }
