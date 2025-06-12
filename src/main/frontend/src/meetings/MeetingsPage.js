@@ -34,21 +34,11 @@ export default function MeetingsPage({username}) {
             const nextMeetings = [...meetings, newMeeting];
             setMeetings(nextMeetings);
             setAddingNewMeeting(false);
+
         }
     }
 
-    async function handleGetMeeting1(updateMeeting) {
 
-        const response = await fetch(`/api/meetings/${updateMeeting.id}`, {
-            method: 'GET',
-        });
-
-        if (response.ok) {
-            setUpdateMeeting(updateMeeting)
-            // console.log("GET updateMeeting " + updateMeeting.id)
-            setEditMeeting(true)
-        }
-    }
 
     async function handleGetMeeting(meeting) {
 
@@ -57,32 +47,13 @@ export default function MeetingsPage({username}) {
         });
 
         if (response.ok) {
-            // setMeetings(meeting)
+            setAddingNewMeeting(false);
             setMeeting(meeting)
             // console.log("GET updateMeeting " + updateMeeting.id)
             setEditMeeting(true)
         }
     }
 
-
-    async function handleUpdateMeeting1(updateMeeting) {
-
-        // console.log("123 meeting " + meeting.id)
-        console.log("PUT meeting " + updateMeeting.id)
-        const response = await fetch(`/api/meetings/${updateMeeting.id}`, {
-        // const response = await fetch(`/api/meetings/2`, {
-            method: 'PUT',
-            body: JSON.stringify(updateMeeting),
-            headers: {'Content-Type': 'application/json'}
-        });
-
-        if (response.ok) {
-
-            setEditMeeting(false);
-            setUpdateMeeting(null);
-
-        }
-    }
 
     async function handleUpdateMeeting(meeting) {
 
@@ -113,6 +84,7 @@ async function handleDeleteMeeting(meeting) {
     if (response.ok) {
         const nextMeetings = meetings.filter(m => m !== meeting);
         setMeetings(nextMeetings);
+        // setEditMeeting(false)
     }
 }
 
@@ -169,7 +141,7 @@ async function handleDeleteParticipant(meeting) {
 
             editMeeting
             ? <UpdateMeetingForm meeting={meeting}
-                                 setUpdateMeeting ={meeting}
+                                 // setUpdateMeeting ={meeting}
                                  onSubmit={(meeting) => handleUpdateMeeting(meeting)}/>
                 : <button>??????????</button>
 
