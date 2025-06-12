@@ -59,6 +59,8 @@ public class MeetingService {
     public void update(Meeting meeting) {
         Transaction transaction = this.session.beginTransaction();
         this.session.merge(meeting);
+        System.out.println("meeting updated: " + meeting.getTitle());
+        System.out.println("meeting updated: " + meeting.getDescription());
         transaction.commit();
     }
 

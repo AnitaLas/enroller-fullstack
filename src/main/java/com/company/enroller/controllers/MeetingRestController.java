@@ -79,42 +79,32 @@ public class MeetingRestController {
 
     @RequestMapping(value = "/{id}/participants", method = RequestMethod.POST)
     public ResponseEntity<?> addParticipant(@PathVariable("id") long id, @RequestBody Participant participant) {
-        System.out.println("82 meeting id= " + id);
-        System.out.println("test 1a");
+//        System.out.println("82 meeting id= " + id);
+//        System.out.println("test 1a");
         Meeting meeting = meetingService.findById(id);
-        System.out.println("test 1b");
+//        System.out.println("test 1b");
         if (meeting == null) {
-            System.out.println("test 1c");
+//            System.out.println("test 1c");
             return new ResponseEntity<>("Meeting not found", HttpStatus.NOT_FOUND);
         }
 
-        System.out.println("test 2a");
+//        System.out.println("test 2a");
         Participant existingParticipant = participantService.findByLogin(participant.getLogin());
-        System.out.println("test 2b");
+//        System.out.println("test 2b");
         if (existingParticipant == null) {
-            System.out.println("test 2c");
+//            System.out.println("test 2c");
             return new ResponseEntity<>("Participant not found", HttpStatus.NOT_FOUND);
         }
 
-//   działa dodawanie, gdy zakomentowane sprawdzanie - trzeba naprawić
 //        System.out.println("test 3a");
-//        Participant mettingParticipant = meetingService.getParticipant(id, existingParticipant);
-//        System.out.println("test 3b");
-//        if (mettingParticipant == null) {
-//            System.out.println("test 3c");
-//            return new ResponseEntity<>("Participant already registered.", HttpStatus.FOUND);
-//        }
-
-        System.out.println("test 3a");
         Participant mettingParticipant = meetingService.getParticipant(id, existingParticipant);
-//        System.out.println("test 3b " + meetingService.getParticipant(id, existingParticipant));
-        System.out.println("test 3b " + mettingParticipant);
+//        System.out.println("test 3b " + mettingParticipant);
         if (meetingService.getParticipant(id, existingParticipant) != null) {
-            System.out.println("test 3c");
+//            System.out.println("test 3c");
             return new ResponseEntity<>("Participant already registered.", HttpStatus.FOUND);
         }
 
-        System.out.println("test 4");
+//        System.out.println("test 4");
         meeting.addParticipant(existingParticipant);
         meetingService.update(meeting);
         return new ResponseEntity<>(meeting, HttpStatus.OK);
