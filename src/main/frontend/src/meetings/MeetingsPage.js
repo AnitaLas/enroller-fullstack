@@ -37,7 +37,7 @@ export default function MeetingsPage({username}) {
         }
     }
 
-    async function handleGetMeeting(updateMeeting) {
+    async function handleGetMeeting1(updateMeeting) {
 
         const response = await fetch(`/api/meetings/${updateMeeting.id}`, {
             method: 'GET',
@@ -50,8 +50,22 @@ export default function MeetingsPage({username}) {
         }
     }
 
+    async function handleGetMeeting(meeting) {
 
-    async function handleUpdateMeeting(updateMeeting) {
+        const response = await fetch(`/api/meetings/${meeting.id}`, {
+            method: 'GET',
+        });
+
+        if (response.ok) {
+            // setMeetings(meeting)
+            setMeeting(meeting)
+            // console.log("GET updateMeeting " + updateMeeting.id)
+            setEditMeeting(true)
+        }
+    }
+
+
+    async function handleUpdateMeeting1(updateMeeting) {
 
         // console.log("123 meeting " + meeting.id)
         console.log("PUT meeting " + updateMeeting.id)
@@ -67,6 +81,27 @@ export default function MeetingsPage({username}) {
             setEditMeeting(false);
             setUpdateMeeting(null);
 
+        }
+    }
+
+    async function handleUpdateMeeting(meeting) {
+
+        // console.log("123 meeting " + meeting.id)
+        console.log("PUT meeting " + meeting.id)
+        const response = await fetch(`/api/meetings/${meeting.id}`, {
+            // const response = await fetch(`/api/meetings/2`, {
+            method: 'PUT',
+            body: JSON.stringify(meeting),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        if (response.ok) {
+            // może da się odświeżyć tylko jeden element? - poszukać info
+            const meetingsFromDb = await fetch('/api/meetings');
+            const meetingsFromDbAsOojJS = await meetingsFromDb.json();
+            setMeetings(meetingsFromDbAsOojJS);
+
+            setEditMeeting(false);
         }
     }
 
@@ -127,14 +162,15 @@ async function handleDeleteParticipant(meeting) {
         }
         {
             // editMeeting
-            // ? <UpdateMeetingForm meeting={meeting}
-            //                      setUpdateMeeting ={setEditMeeting}
-            //                      onUpdateMeeting={(meeting) => handleGetMeeting(meeting)}/>
-            // : <button >Zapisz zmiany</button>
+            //     ? <UpdateMeetingForm meeting={updateMeeting}
+            //                          setUpdateMeeting ={setEditMeeting}
+            //                          onSubmit={(updateMeeting) => handleUpdateMeeting(updateMeeting)}/>
+            //     : <button>??????????</button>
+
             editMeeting
-            ? <UpdateMeetingForm meeting={updateMeeting}
-                                 setUpdateMeeting ={setEditMeeting}
-                                 onSubmit={(updateMeeting) => handleUpdateMeeting(updateMeeting)}/>
+            ? <UpdateMeetingForm meeting={meeting}
+                                 setUpdateMeeting ={meeting}
+                                 onSubmit={(meeting) => handleUpdateMeeting(meeting)}/>
                 : <button>??????????</button>
 
 
