@@ -32,7 +32,7 @@ public class MeetingsTests extends BaseTests {
         this.loginPage = new LoginPage(driver);
         this.page.get(Const.HOME_PAGE);
 
-        //        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+//        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
 
     }
 
@@ -76,12 +76,28 @@ public class MeetingsTests extends BaseTests {
     // @Test
     // TODO: Sprawdź czy użytkownik może dodać spotkanie bez nazwy. Załóż że nie ma takiej możliwości a warunkiem
     //  jest nieaktywny przycisk "Dodaj".
+    @Test
+    @DisplayName("[SPOTKANIA.2] Użytkownik nie może dodać spsotkanie bez tytułu. Przycisk 'Dodaj' jest nieaktywny.")
+    void cannotAddMeetingWithoutTitle() {
+
+        this.loginPage.loginAs(Const.USER_I_NAME);
+
+        this.page.addNewMeeting(Const.MEETING_IV_EMPTY_TITLE, Const.MEETING_DESC);
+
+        WebElement addButton = driver.findElement(By.cssSelector("#root > div > div > div > form > button"));
+
+//        czy przycisk jest nieaktywny
+        assertThat(addButton.isEnabled()).isFalse();
+    }
+
 
     // @Test
     // TODO: Sprawdź czy użytkownik może poprawnie zapisać się do spotkania.
 
+
     // @Test
     // TODO: Sprawdź czy użytkownik może usunąć puste spotkanie.
+
 
     @AfterEach
     void exit() {
