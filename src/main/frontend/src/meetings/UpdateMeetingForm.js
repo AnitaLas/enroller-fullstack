@@ -19,7 +19,6 @@ export default function UpdateMeetingForm({meeting, onSubmit, onCancel}) {
             <textarea value={description}
                       onChange={(e) => setDescription(e.target.value)}></textarea>
             <button type="submit">Zapisz zmiany</button>
-            {/*<button onClick={onCancel}>Zamknij bez zapisu</button>*/}
             <button onClick={onCancel}>X</button>
         </form>
     );

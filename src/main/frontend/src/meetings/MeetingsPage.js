@@ -36,7 +36,6 @@ export default function MeetingsPage({username}) {
         }
     }
 
-
     async function handleGetMeeting(meeting) {
         const response = await fetch(`/api/meetings/${meeting.id}`, {
             method: 'GET',
@@ -49,13 +48,8 @@ export default function MeetingsPage({username}) {
         }
     }
 
-
     async function handleUpdateMeeting(meeting) {
-
-        // console.log("123 meeting " + meeting.id)
-        console.log("PUT meeting " + meeting.id)
         const response = await fetch(`/api/meetings/${meeting.id}`, {
-            // const response = await fetch(`/api/meetings/2`, {
             method: 'PUT',
             body: JSON.stringify(meeting),
             headers: {'Content-Type': 'application/json'}
@@ -83,11 +77,6 @@ export default function MeetingsPage({username}) {
     }
 
     async function handleAddParticipant(meeting) {
-
-        // let meetingId = meeting.id;
-        console.log("meetingId: " + meeting.id);
-        // console.log("username: " + username) ;
-
         const response = await fetch(`/api/meetings/${meeting.id}/participants`, {
 
             method: 'POST',
@@ -102,21 +91,15 @@ export default function MeetingsPage({username}) {
     }
 
     async function handleDeleteParticipant(meeting) {
-
-        // let meetingId = meeting.id;
-        console.log("meetingId: " + meeting.id);
-        // console.log("username: " + username) ;
-
         const response = await fetch(`/api/meetings/${meeting.id}/participants/${username}`, {
             method: 'DELETE',
         });
         if (response.ok) {
-            // const nextMeetings = meetings.filter(m => m !== meeting);
-            // setMeetings(nextMeetings);
+
         }
     }
 
-    async function handleCancelUpdateMeeting(meeting){
+    async function handleCancelUpdateMeeting(meeting) {
         setEditMeeting(false)
     }
 
@@ -129,13 +112,22 @@ export default function MeetingsPage({username}) {
                     : <button onClick={() => setAddingNewMeeting(true)}>Dodaj nowe spotkanie</button>
             }
             {
-                editMeeting
-                    ? <UpdateMeetingForm
+                // editMeeting
+                //     ? <UpdateMeetingForm
+                //         key={meeting?.id}
+                //         meeting={meeting}
+                //         onSubmit={(meeting) => handleUpdateMeeting(meeting)}
+                //         onCancel={(meeting) => handleCancelUpdateMeeting(meeting)}/>
+                //     : <button>do zmiany</button>
+
+                editMeeting && (
+                    <UpdateMeetingForm
                         key={meeting?.id}
                         meeting={meeting}
                         onSubmit={(meeting) => handleUpdateMeeting(meeting)}
-                        onCancel={(meeting) => handleCancelUpdateMeeting(meeting)}/>
-                    : <button>do zmiany</button>
+                        onCancel={handleCancelUpdateMeeting}
+                    />
+                )
             }
             {meetings.length > 0 &&
                 <MeetingsList meetings={meetings} username={username}
