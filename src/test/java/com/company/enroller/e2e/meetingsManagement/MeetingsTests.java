@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,44 +37,36 @@ public class MeetingsTests extends BaseTests {
 
     }
 
-
+    // TODO: Dodaj sprawdzenie czy poprawnie został dodany opis.
+    // TODO: Dodaj sprawdzenie czy zgadza się aktualna liczba spotkań.
     @Test
     @DisplayName("[SPOTKANIA.1] The meeting should be added to your meeting list. It should contain a title and description.")
     void addNewMeeting() {
-        // TODO: Dodaj sprawdzenie czy poprawnie został dodany opis.
-        // TODO: Dodaj sprawdzenie czy zgadza się aktualna liczba spotkań.
 
-//        logowanie
-        this.loginPage.loginAs(Const.USER_I_NAME);
+        this.loginPage.loginAs(Const.USER_II_NAME);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement meetingLabel = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("#root > div > div > div > h2")
         ));
 
-//        sprawdza ilość przed dodaniem kolejnego spotkania do listy
         wait.until(ExpectedConditions.textToBePresentInElement(meetingLabel, "(2)"));
         String labelText = meetingLabel.getText();
         assertThat(labelText).contains("2");
 
-//        dodanie nowego spotkania
         this.page.addNewMeeting(Const.MEETING_III_TITLE, Const.MEETING_DESC);
 
-//        sprawdza ilość po dodaniu nowego spotkania
         wait.until(ExpectedConditions.textToBePresentInElement(meetingLabel, "(3)"));
         assertThat(meetingLabel.getText()).contains("3");
 
-//        sprawdzanie opisu
         WebElement newMeeting = this.page.getMeetingByTitle(Const.MEETING_III_TITLE);
         assertThat(newMeeting).isNotNull();
         assertThat(newMeeting.getText()).contains(Const.MEETING_DESC);
 
-//        to już było dodane
         assertThat(this.page.getMeetingByTitle(Const.MEETING_III_TITLE)).isNotNull();
 
     }
 
-    // @Test
     // TODO: Sprawdź czy użytkownik może dodać spotkanie bez nazwy. Załóż że nie ma takiej możliwości a warunkiem
     //  jest nieaktywny przycisk "Dodaj".
     @Test
@@ -81,28 +74,70 @@ public class MeetingsTests extends BaseTests {
     void cannotAddMeetingWithoutTitle() {
 
         this.loginPage.loginAs(Const.USER_I_NAME);
-
         this.page.addNewMeeting(Const.MEETING_IV_EMPTY_TITLE, Const.MEETING_DESC);
-
         WebElement addButton = driver.findElement(By.cssSelector("#root > div > div > div > form > button"));
 
-//        czy przycisk jest nieaktywny
         assertThat(addButton.isEnabled()).isFalse();
     }
 
 
-    // @Test
+
     // TODO: Sprawdź czy użytkownik może poprawnie zapisać się do spotkania.
+    @Test
+    @DisplayName("[SPOTKANIA.3] Sprawdzenie, czy użytkownik może zapisać się na spotkanie.")
+    void registerToMeeting() {
+        this.loginPage.loginAs(Const.USER_I_NAME);
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(driver -> this.page.getMeetingByTitle(Const.MEETING_II_TITLE) != null);
+
+        WebElement meeting = this.page.getMeetingByTitle(Const.MEETING_II_TITLE);
+        assertThat(meeting).isNotNull();
+        this.page.registerToMeeting(meeting);
+
+        WebElement button = meeting.findElement(By.cssSelector("#root > div > div > div > table > tbody > tr:nth-child(2) > td:nth-child(4) > button"));
+        String buttonText = button.getText().toLowerCase();
+        assertThat(buttonText).contains("wypisz się");
+
+    }
 
 
-    // @Test
     // TODO: Sprawdź czy użytkownik może usunąć puste spotkanie.
+    @Test
+    @DisplayName("[SPOTKANIA.4] Sprawdza czy użytkownik może usunąć spotkanie bez tytułu i opisu.")
+    void deleteEmptyMeeting() throws InterruptedException {
 
+        this.loginPage.loginAs(Const.USER_I_NAME);
+        this.page.addNewMeeting("", "");
+
+        WebElement emptyMeeting = this.page.getLastMeeting();
+        assertThat(emptyMeeting).isNotNull();
+
+        this.page.deleteMeeting(emptyMeeting);
+        String deletedMeetingText = "";
+
+        boolean isRemoved = false;
+        for (int i = 0; i < 5; i++) {
+            Thread.sleep(1000);
+            List<WebElement> currentMeetings = this.page.getAllMeetings();
+            isRemoved = true;
+            for (WebElement el : currentMeetings) {
+                if (el.getText().trim().equals(deletedMeetingText)) {
+                    isRemoved = false;
+                    break;
+                }
+            }
+            if (isRemoved) break;
+        }
+
+        assertThat(isRemoved).isTrue();
+    }
 
     @AfterEach
     void exit() {
         this.page.quit();
         this.removeAllMeeting();
     }
+
 
 }
